@@ -65,8 +65,6 @@ feature_list = ["Physics_wheel_angular_s_front_left",
                 "Physics_wheel_slip_front_right",
                 "Physics_wheel_slip_rear_left",
                 "Physics_wheel_slip_rear_right",
-                "Physics_brake",
-                "Physics_gas",
                 "Physics_brake_pressure_front_left",
                 "Physics_brake_pressure_front_right",
                 "Physics_brake_pressure_rear_left",
@@ -116,7 +114,9 @@ feature_list = ["Physics_wheel_angular_s_front_left",
                 "Physics_road_temp",
                 "Physics_air_temp",
                 "Graphics_wind_speed",
-                "Physics_speed_kmh"
+                "Physics_speed_kmh",
+                "Physics_brake",
+                "Physics_gas"
                 ]
 
 df = df[feature_list]

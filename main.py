@@ -22,8 +22,9 @@ def pre_process(df,train_size = 0.7):
     labels = []
 
     for i in range(len(df)):
-        features.append(scaled_data[i][:-1])
-        labels.append(scaled_data[i][-1:])
+        features.append(scaled_data[i][:-2])
+        ## brake, gas
+        labels.append(scaled_data[i][-2:])
 
 
     features = np.array(features)
@@ -65,11 +66,11 @@ if __name__ == "__main__":
     df = pd.read_csv("output_clean_split.csv")
     train_loader,val_loader,test_loader = pre_process(df)
 
-    model = Pred(67,128,1)
+    model = Pred(66,128,2)
     criterion = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(),lr=0.001)
 
-    num_epochs = 20
+    num_epochs = 50
 
     best_val_loss = float('inf')
     patience = 5
@@ -127,10 +128,24 @@ if __name__ == "__main__":
     predictions = torch.cat(predictions).numpy()
     true_labels = torch.cat(true_labels).numpy()
 
-    plt.plot(true_labels,linestyle="none",label="True",marker='o')
-    plt.plot(predictions, linestyle='none',label="Predicted", marker='x')
-    plt.title('Machine Learning Predictions vs. Original Data')
-    plt.xlabel('Time Step')
-    plt.ylabel('Value')
-    plt.legend()
-    plt.show()
+fig, axs = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+
+# Subplot 1: Brake
+axs[0].plot(true_labels[:, 0], linestyle="none", label="True Brake", marker='o')
+axs[0].plot(predictions[:, 0], linestyle='none', label="Predicted Brake", marker='x')
+axs[0].set_title('Brake: Predictions vs. True Values')
+axs[0].set_ylabel('Brake Value')
+axs[0].legend()
+axs[0].grid(True)
+
+# Subplot 2: Gas
+axs[1].plot(true_labels[:, 1], linestyle="none", label="True Gas", marker='o')
+axs[1].plot(predictions[:, 1], linestyle='none', label="Predicted Gas", marker='x')
+axs[1].set_title('Gas: Predictions vs. True Values')
+axs[1].set_xlabel('Time Step')
+axs[1].set_ylabel('Gas Value')
+axs[1].legend()
+axs[1].grid(True)
+
+plt.tight_layout()
+plt.show()
